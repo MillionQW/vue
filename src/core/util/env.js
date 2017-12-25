@@ -2,9 +2,11 @@
 declare var WXEnvironment: any;
 
 // can we use __proto__?
+// 判断支不支持 __proto__ 这个属性
 export const hasProto = '__proto__' in {}
 
 // Browser environment sniffing
+// 运行环境识别
 export const inBrowser = typeof window !== 'undefined'
 export const inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform
 export const weexPlatform = inWeex && WXEnvironment.platform.toLowerCase()
@@ -17,6 +19,7 @@ export const isIOS = (UA && /iphone|ipad|ipod|ios/.test(UA)) || (weexPlatform ==
 export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge
 
 // Firefox has a "watch" function on Object.prototype...
+// Firefox对对象内置了一个watch方法（watch(prop, handler)），监控某属性，当发生变化时立即调用handler
 export const nativeWatch = ({}).watch
 
 export let supportsPassive = false
@@ -51,17 +54,22 @@ export const isServerRendering = () => {
 }
 
 // detect devtools
+// 判断有没有安装开发插件
 export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
 
+// istanbul是一个判断代码块是否已经被测试的工具
+// 所以这个注释的意思是让istanbul不测试下面的函数
 /* istanbul ignore next */
 export function isNative (Ctor: any): boolean {
   return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
 }
 
+// 判断是否支持此ES6中的Symbol Reflect
 export const hasSymbol =
   typeof Symbol !== 'undefined' && isNative(Symbol) &&
   typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys)
 
+// 写了一个Set的polyfill
 let _Set
 /* istanbul ignore if */ // $flow-disable-line
 if (typeof Set !== 'undefined' && isNative(Set)) {
